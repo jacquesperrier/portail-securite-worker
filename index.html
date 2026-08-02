@@ -1,1 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
+<title>Portail Sécurité — Verdict 360 AI</title>
+<style>
+  :root{
+    --cream:#FAF7F0;
+    --ink:#2B2620;
+    --gold-1:#9C7F3D;
+    --gold-2:#B8954A;
+    --gold-3:#D4C28E;
+    --gold-4:#F0E4C0;
+    --safe:#2E7D32;
+    --safe-bg:#E8F3E8;
+    --caution:#B8542B;
+    --caution-bg:#FBEEE6;
+    --danger:#A13A2E;
+    --danger-bg:#F8E8E6;
+    --card-border:#E4DCC8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:Georgia, 'Times New Roman', serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:28px 20px 60px;}
 
+  header{
+    text-align:center;
+    padding:8px 0 28px;
+  }
+  .brandmark{
+    font-family:Georgia, serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.18em;
+    background:linear-gradient(110deg, var(--gold-1) 0%, var(--gold-2) 35%, var(--gold-4) 50%, var(--gold-2) 65%, var(--gold-1) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-weight:800;
+    font-size:30px;
+    margin:6px 0 8px;
+    color:var(--ink);
+  }
+  .sub{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:18px;
+    color:#5A5040;
+    max-width:480px;
+    margin:0 auto;
+  }
+
+  h2.section-title{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:22px;
+    font-weight:800;
+    margin:40px 0 16px;
+    color:var(--ink);
+  }
+
+  .signal-card{
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    background:#fff;
+    border:1px solid var(--card-border);
+    border-left:6px solid var(--gold-2);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:14px;
+  }
+  .signal-icon{
+    flex:0 0 auto;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--gold-4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+  }
+  .signal-text h3{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:19px;
+    font-weight:700;
+    margin:2px 0 6px;
+  }
+  .signal-text p{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:17px;
+    margin:0;
+    color:#4A4234;
+  }
+
+  .analyzer{
+    background:#fff;
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:24px 20px;
+    margin-top:8px;
+  }
+  .analyzer p.lead{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:17px;
+    color:#4A4234;
+    margin-top:0;
+  }
+  textarea{
+    width:100%;
+    min-height:130px;
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:17px;
+    padding:14px;
+    border:2px solid var(--card-border);
+    border-radius:10px;
+    resize:vertical;
+    color:var(--ink);
+  }
+  textarea:focus{
+    outline:3px solid var(--gold-3);
+    border-color:var(--gold-2);
+  }
+  button.check-btn{
+    width:100%;
+    margin-top:14px;
+    padding:16px;
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:19px;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(110deg, var(--gold-1) 0%, var(--gold-2) 35%, var(--gold-3) 50%, var(--gold-2) 65%, var(--gold-1) 100%);
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    min-height:52px;
+  }
+  button.check-btn:disabled{opacity:0.6;cursor:default;}
+  button.check-btn:focus-visible{outline:3px solid var(--gold-1); outline-offset:2px;}
+
+  .result{
+    margin-top:20px;
+    border-radius:12px;
+    padding:20px;
+    display:none;
+  }
+  .result.show{display:block;}
+  .result.safe{background:var(--safe-bg); border:2px solid var(--safe);}
+  .result.caution{background:var(--caution-bg); border:2px solid var(--caution);}
+  .result.danger{background:var(--danger-bg); border:2px solid var(--danger);}
+  .result-label{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-weight:800;
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+  }
+  .result.safe .result-label{color:var(--safe);}
+  .result.caution .result-label{color:var(--caution);}
+  .result.danger .result-label{color:var(--danger);}
+  .result-body{
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:17px;
+    color:var(--ink);
+    white-space:pre-wrap;
+  }
+
+  .loading{
+    display:none;
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px;
+    color:#8A7B55;
+    margin-top:14px;
+    text-align:center;
+  }
+  .loading.show{display:block;}
+
+  footer{
+    margin-top:44px;
+    text-align:center;
+    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:14px;
+    color:#8A7B55;
+  }
+  footer a{color:var(--gold-1);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brandmark">Verdict 360 AI</div>
+    <h1>Portail Sécurité</h1>
+    <p class="sub">Un coup d'œil rapide avant d'agir — pour vous protéger des arnaques.</p>
+  </header>
+
+  <h2 class="section-title">Les 3 signaux à reconnaître</h2>
+
+  <div class="signal-card">
+    <div class="signal-icon">⏰</div>
+    <div class="signal-text">
+      <h3>L'urgence</h3>
+      <p>On vous presse d'agir tout de suite, sinon vous perdrez quelque chose. Une vraie institution vous laisse toujours le temps de vérifier.</p>
+    </div>
+  </div>
+
+  <div class="signal-card">
+    <div class="signal-icon">🤫</div>
+    <div class="signal-text">
+      <h3>Le secret</h3>
+      <p>On vous demande de ne pas en parler à votre famille, votre banque ou la police. C'est le signe le plus fiable d'une arnaque.</p>
+    </div>
+  </div>
+
+  <div class="signal-card">
+    <div class="signal-icon">💳</div>
+    <div class="signal-text">
+      <h3>Le paiement inhabituel</h3>
+      <p>Cartes-cadeaux, cryptomonnaie, virement Interac à un inconnu, argent comptant envoyé par la poste : aucune institution sérieuse ne demande ça.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">Un doute sur un message ?</h2>
+
+  <div class="analyzer">
+    <p class="lead">Collez ici le texte d'un courriel, d'un texto, ou ce qu'on vous a dit au téléphone. On vous dit si ça ressemble à une arnaque, en mots simples.</p>
+    <textarea id="msgInput" placeholder="Exemple : Bonjour, votre petit-fils a eu un accident et a besoin de 3000$ immédiatement pour..."></textarea>
+    <button class="check-btn" id="checkBtn" onclick="analyzeMessage()">Vérifier ce message</button>
+    <div class="loading" id="loadingMsg">Analyse en cours…</div>
+
+    <div class="result" id="resultBox">
+      <div class="result-label" id="resultLabel"></div>
+      <div class="result-body" id="resultBody"></div>
+    </div>
+  </div>
+
+  <footer>
+    Verdict 360 AI — verdict360ai.com<br>
+    info@verdict360ai.com · +1 (873) 822-1455
+  </footer>
+
+</div>
+
+<script>
+async function analyzeMessage(){
+  const input = document.getElementById('msgInput').value.trim();
+  const btn = document.getElementById('checkBtn');
+  const loading = document.getElementById('loadingMsg');
+  const resultBox = document.getElementById('resultBox');
+
+  if(!input){
+    alert("Veuillez d'abord coller un message à vérifier.");
+    return;
+  }
+
+  btn.disabled = true;
+  loading.classList.add('show');
+  resultBox.classList.remove('show','safe','caution','danger');
+
+  try{
+    const response = await fetch("https://portail-securite-worker.mjacquesperrier.workers.dev", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: input })
+    });
+
+    const parsed = await response.json();
+
+    const resultLabel = document.getElementById('resultLabel');
+    const resultBody = document.getElementById('resultBody');
+
+    let cls = 'safe', icon = '✅', title = 'Ça semble correct';
+    if(parsed.niveau === 'prudence'){ cls='caution'; icon='⚠️'; title='Soyez prudent'; }
+    if(parsed.niveau === 'danger'){ cls='danger'; icon='🚫'; title='Signes d\'arnaque'; }
+
+    resultBox.classList.add('show', cls);
+    resultLabel.innerHTML = `<span>${icon}</span><span>${title}</span>`;
+    resultBody.textContent = parsed.explication || "Impossible d'analyser ce message pour le moment.";
+
+  }catch(err){
+    resultBox.classList.add('show','caution');
+    document.getElementById('resultLabel').innerHTML = "⚠️ Erreur";
+    document.getElementById('resultBody').textContent = "L'analyse n'a pas fonctionné. Si vous avez un doute, montrez ce message à un proche de confiance avant d'agir.";
+    console.error(err);
+  }finally{
+    btn.disabled = false;
+    loading.classList.remove('show');
+  }
+}
+</script>
+</body>
+</html>
